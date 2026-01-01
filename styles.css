@@ -564,6 +564,41 @@ footer {
 
 /* --- Printable Order Form Styles --- */
 
+.pdf-export-style {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    padding: 20mm !important;
+    margin: 0 !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: -9999 !important;
+}
+
+.pdf-export-style * {
+    color: #000000 !important;
+    border-color: #000000 !important;
+    background: transparent !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.pdf-export-style .form-header,
+.pdf-export-style .services-table th,
+.pdf-export-style .services-table td,
+.pdf-export-style .contact-grid,
+.pdf-export-style .work-desc-section,
+.pdf-export-style .line-input,
+.pdf-export-style .qty-input {
+    border-color: #000000 !important;
+}
+
+.pdf-export-style .services-table th {
+    background-color: #f0f0f0 !important;
+}
+
 .paper-form {
     background: #fff;
     color: #000;

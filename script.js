@@ -53,68 +53,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // PDF Generation Function
 function generatePDF() {
-    const element = document.getElementById('pdf-content');
+    const originalElement = document.getElementById('pdf-content');
+    
+    // Create a clone to manipulate for PDF generation
+    const clone = originalElement.cloneNode(true);
+    
+    // Add the print-specific class
+    clone.classList.add('pdf-export-style');
+    
+    // Sync values from original to clone (cloneNode doesn't copy current input values)
+    const originalInputs = originalElement.querySelectorAll('input, textarea');
+    const cloneInputs = clone.querySelectorAll('input, textarea');
+    
+    originalInputs.forEach((input, index) => {
+        const cloneInput = cloneInputs[index];
+        
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            cloneInput.checked = input.checked;
+            if (input.checked) {
+                cloneInput.setAttribute('checked', 'checked');
+            }
+        } else if (input.tagName === 'TEXTAREA') {
+            cloneInput.innerHTML = input.value;
+            cloneInput.value = input.value;
+        } else {
+            cloneInput.setAttribute('value', input.value);
+            cloneInput.value = input.value;
+        }
+    });
+    
+    // Append clone to body so html2pdf can render it
+    document.body.appendChild(clone);
     
     // Options for html2pdf
     const opt = {
-        margin:       [5, 5, 5, 5], // T, R, B, L
+        margin:       0, // Margins handled by CSS padding
         filename:     'KIAS-Bestillingsskjema.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, logging: false, useCORS: true },
+        html2canvas:  { scale: 2, logging: false, useCORS: true, scrollX: 0, scrollY: 0 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak:    { mode: 'avoid-all' }
     };
 
-    // Use html2pdf to generate the PDF
-    // We need to ensure inputs are captured correctly
-    // html2pdf usually captures the DOM state, but let's double check if we need to set value attribute for inputs
-    
-    // Helper to sync input values to DOM attributes for printing
-    const inputs = element.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            if (input.checked) {
-                input.setAttribute('checked', 'checked');
-            } else {
-                input.removeAttribute('checked');
-            }
-        } else if (input.type === 'text' || input.type === 'email' || input.type === 'number') {
-            input.setAttribute('value', input.value);
-        } else if (input.tagName === 'TEXTAREA') {
-            input.innerHTML = input.value;
-        }
-    });
-
-    // Temporarily force text color to black and background to white for PDF generation
-    const originalColor = element.style.color;
-    const originalBg = element.style.background;
-    
-    element.style.color = '#000000';
-    element.style.background = '#ffffff';
-    
-    // Helper to force all children to have black text
-    const allChildren = element.querySelectorAll('*');
-    allChildren.forEach(child => {
-        child.dataset.originalColor = child.style.color || '';
-        child.style.color = '#000000';
-        
-        // Handle border colors too
-        child.dataset.originalBorderColor = child.style.borderColor || '';
-        if (getComputedStyle(child).borderColor !== 'rgba(0, 0, 0, 0)') {
-            child.style.borderColor = '#000000';
-        }
-    });
-    
-    html2pdf().set(opt).from(element).save().then(() => {
-        // Restore styles after save
-        element.style.color = originalColor;
-        element.style.background = originalBg;
-        
-        allChildren.forEach(child => {
-            child.style.color = child.dataset.originalColor;
-            if (child.dataset.originalBorderColor) {
-                child.style.borderColor = child.dataset.originalBorderColor;
-            }
-        });
+    html2pdf().set(opt).from(clone).save().then(() => {
+        // Remove the clone after generation
+        document.body.removeChild(clone);
     });
 }

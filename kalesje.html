@@ -13,6 +13,8 @@
     <meta property="og:url" content="https://kias.no/kalesje.html">
 
     <link rel="stylesheet" href="styles.css?v=1.1">
+    <!-- html2pdf.js for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -83,6 +85,134 @@
                     <div class="service-icon">🛋️</div>
                     <h3>Spesialsøm</h3>
                     <p>Omtrekk av puter, stoler og spesialprodukter til bedrifter.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Form Section -->
+    <section id="order-form" class="section-padding">
+        <div class="container">
+            <h2 class="section-title reveal">Bestillingsskjema</h2>
+            <p class="text-center" style="margin-bottom: 2rem; opacity: 0.8;">Fyll ut skjemaet digitalt her, og last ned som PDF. Legg PDF-en i posen sammen med kalesjen.</p>
+            
+            <div class="form-actions text-center" style="margin-bottom: 2rem;">
+                <button onclick="generatePDF()" class="btn-primary">Last ned utfylt skjema (PDF)</button>
+            </div>
+
+            <div id="pdf-content" class="paper-form">
+                <div class="form-header">
+                    <h2>Bestilling/Pristilbud KIAS AS</h2>
+                    <p class="warning-text">Bestilling/Pristilbud som mangler opplysninger i feltet under, vil ikke bli behandlet/utført før alle opplysninger er på plass.</p>
+                </div>
+
+                <div class="form-row kalesje-color-row">
+                    <label>Leverer du inn en kalesje, trenger vi kalesjens farge:</label>
+                    <input type="text" class="line-input" placeholder="________________________">
+                </div>
+
+                <div class="form-row date-row">
+                    <label>Dag/Dato</label>
+                    <input type="text" class="line-input short" placeholder="__/__ - ____">
+                </div>
+
+                <div class="contact-grid">
+                    <div class="input-group">
+                        <label>Navn:</label>
+                        <input type="text" class="line-input full">
+                    </div>
+                    <div class="input-group">
+                        <label>Mobil:</label>
+                        <input type="text" class="line-input full">
+                    </div>
+                    <div class="input-group">
+                        <label>Adresse:</label>
+                        <input type="text" class="line-input full">
+                    </div>
+                    <div class="input-group">
+                        <label>E-post:</label>
+                        <input type="email" class="line-input full">
+                    </div>
+                    <div class="input-group">
+                        <label>Postnummer:</label>
+                        <input type="text" class="line-input full">
+                    </div>
+                    <div class="input-group">
+                        <label>By:</label>
+                        <input type="text" class="line-input full">
+                    </div>
+                </div>
+
+                <div class="work-desc-section">
+                    <h3>Arbeidsbeskrivelse/info fra kunden</h3>
+                    <textarea class="work-area" placeholder="Skriv ekstra opplysninger i dette feltet"></textarea>
+                </div>
+
+                <p class="info-small">
+                    Du vil motta en e-post med tilbud på det du ønsker utført. Du velger selv om du ønsker å benytte tilbudet eller ikke.
+                    Ønsker du tilbudet utført, vil du motta en Ordrebekreftelse og våre vilkår. Du vil få beskjed når det du ønsker utført er ferdig.
+                    Du kan hente dette her i selvbetjeningen igjen når bekreftet betaling er mottatt vår konto.
+                </p>
+
+                <table class="services-table">
+                    <thead>
+                        <tr>
+                            <th>Vare/Tjenester</th>
+                            <th>Kalesje</th>
+                            <th>Fortelt U/6m</th>
+                            <th>Fortelt O/6m</th>
+                            <th>Info</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Omsøm:</strong> <input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td class="small-text">Leveringstid i sesong er ca. 3 uker. Prisene kan variere etter størrelse.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rens/Imp:</strong> <input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td class="small-text">Leveringstid i sesong er ca. 4 uker. Prisene kan variere etter størrelse.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bytt vindu:</strong> <input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td class="small-text">Er vinduet sydd inn i glidelåser, kanter eller annet, kan prisen variere.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gl.lås:</strong> <input type="checkbox"></td>
+                            <td colspan="3" class="merged-cell">Prisen er ferdig innsatt. Fjerning av gammel gl.lås, tråd og innsetting av ny lås er inkludert. Prisen er lik for alle varer, utenom spesial glidelåser. Egne priser gjelder.</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lappe hull:</strong> <input type="checkbox"></td>
+                            <td>pr stk</td>
+                            <td>pr stk</td>
+                            <td>pr stk</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Trekk puter:</strong> <input type="checkbox"></td>
+                            <td colspan="3">Vi ser på putene og sender deg tilbud på e-post.</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bøyler:</strong> <input type="checkbox"></td>
+                            <td colspan="3">pr stk <input type="checkbox"> 22mm Alu, Vi kontakter deg, om vi lurer på noe.</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="form-footer">
+                    <p>Copyrighted © - 2019 Kias AS®, S-003</p>
                 </div>
             </div>
         </div>

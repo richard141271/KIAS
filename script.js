@@ -50,3 +50,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// PDF Generation Function
+function generatePDF() {
+    const element = document.getElementById('pdf-content');
+    
+    // Options for html2pdf
+    const opt = {
+        margin:       10,
+        filename:     'KIAS-Bestillingsskjema.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, logging: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    // Use html2pdf to generate the PDF
+    // We need to ensure inputs are captured correctly
+    // html2pdf usually captures the DOM state, but let's double check if we need to set value attribute for inputs
+    
+    // Helper to sync input values to DOM attributes for printing
+    const inputs = element.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            if (input.checked) {
+                input.setAttribute('checked', 'checked');
+            } else {
+                input.removeAttribute('checked');
+            }
+        } else if (input.type === 'text' || input.type === 'email' || input.tagName === 'TEXTAREA') {
+            input.setAttribute('value', input.value);
+            if (input.tagName === 'TEXTAREA') {
+                input.innerHTML = input.value;
+            }
+        }
+    });
+
+    html2pdf().set(opt).from(element).save();
+}

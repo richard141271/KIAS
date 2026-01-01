@@ -552,10 +552,8 @@ footer {
     height: 300px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px dashed rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 768px) {

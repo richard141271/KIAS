@@ -574,7 +574,9 @@ footer {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    z-index: -9999 !important;
+    z-index: 99999 !important; /* Must be on top to be captured */
+    display: block !important;
+    visibility: visible !important;
 }
 
 .pdf-export-style * {

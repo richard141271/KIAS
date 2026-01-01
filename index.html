@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIAS – Fra håndverk til intelligent fremtid</title>
+    
+    <!-- SEO & Open Graph -->
+    <meta name="description" content="KIAS – Der tradisjon møter fremtid. Fra håndverk og industrisøm til 3D-skanning, AI-analyse og intelligente systemer.">
+    <meta property="og:title" content="KIAS – Fra håndverk til intelligent fremtid">
+    <meta property="og:description" content="Vi bygger bransjer som før var manuelle om til intelligente systemer – med AR, 3D-capture og AI-styrt drift.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kias.no">
+    <!-- Placeholder image for sharing (kan byttes senere) -->
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/050505/00ff9d?text=KIAS+Future+Systems">
+
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,11 +23,11 @@
 
     <!-- 1. Hero-seksjon -->
     <header class="hero">
-        <div class="hero-bg">
+        <div class="hero-bg" id="hero-bg">
             <div class="aurora"></div>
             <div class="aurora-2"></div>
         </div>
-        <div class="container hero-content">
+        <div class="container hero-content reveal">
             <h1 class="logo">KIAS</h1>
             <p class="tagline">Håndverk møter AI – Fremtiden sys sammen her.</p>
             <a href="#modules" class="btn-primary">Utforsk økosystemet</a>
@@ -28,19 +38,19 @@
     <section id="acronym" class="section-padding">
         <div class="container">
             <div class="acronym-grid">
-                <div class="acronym-card">
+                <div class="acronym-card reveal">
                     <h2>K</h2>
                     <p>Kunst, Kalesjer, Kunnskap, Kunstig intelligens</p>
                 </div>
-                <div class="acronym-card">
+                <div class="acronym-card reveal delay-100">
                     <h2>I</h2>
                     <p>Innovasjon, Industri, Internasjonalt, Interesse</p>
                 </div>
-                <div class="acronym-card">
+                <div class="acronym-card reveal delay-200">
                     <h2>A</h2>
                     <p>AR, AI, Arbeid, Annerledes, Artsmangfold</p>
                 </div>
-                <div class="acronym-card">
+                <div class="acronym-card reveal delay-300">
                     <h2>S</h2>
                     <p>System, Søm, Skanning, Smittehindring, Superbra</p>
                 </div>
@@ -50,7 +60,7 @@
 
     <!-- 3. Vår reise (Storytelling) -->
     <section id="story" class="section-padding dark-bg">
-        <div class="container text-center">
+        <div class="container text-center reveal">
             <h2>Fra himmel til helvete. Og tilbake igjen – bygget som systemer.</h2>
             <div class="story-timeline">
                 <div class="story-item">
@@ -77,24 +87,24 @@
     <!-- 4. Våre grener (Moduler) -->
     <section id="modules" class="section-padding">
         <div class="container">
-            <h2 class="section-title">Våre grener</h2>
+            <h2 class="section-title reveal">Våre grener</h2>
             <div class="modules-grid">
-                <a href="#" class="module-card">
+                <a href="#" class="module-card reveal">
                     <div class="module-icon">🏠</div>
                     <h3>eiendom.kias</h3>
                     <p>3D-romskanning og digital drift</p>
                 </a>
-                <a href="#" class="module-card">
+                <a href="#" class="module-card reveal delay-100">
                     <div class="module-icon">⛵</div>
                     <h3>kalesje.kias</h3>
                     <p>Fysisk presisjon og industrisøm</p>
                 </a>
-                <a href="#" class="module-card">
+                <a href="#" class="module-card reveal delay-200">
                     <div class="module-icon">🐝</div>
                     <h3>honning.kias</h3>
                     <p>AI-analyse og autohandel</p>
                 </a>
-                <a href="#" class="module-card">
+                <a href="#" class="module-card reveal delay-300">
                     <div class="module-icon">📱</div>
                     <h3>app.kias</h3>
                     <p>AI/MLM/LEX-banken</p>
@@ -105,7 +115,7 @@
 
     <!-- 5. Teknologien -->
     <section id="tech" class="section-padding dark-bg">
-        <div class="container">
+        <div class="container reveal">
             <h2 class="section-title">Verktøyene som drifter fremtiden</h2>
             <ul class="tech-list">
                 <li><span class="check">✔</span> 3D-romskanning (RoomPlan, ARCore)</li>
@@ -120,7 +130,7 @@
 
     <!-- 6. Miljøprofil -->
     <section id="environment" class="section-padding">
-        <div class="container text-center">
+        <div class="container text-center reveal">
             <h2 class="section-title">Teknologi som vokter naturen</h2>
             <div class="env-grid">
                 <div class="env-item">
@@ -145,7 +155,7 @@
 
     <!-- 7. Social Proof / Identitet -->
     <section id="social" class="section-padding dark-bg">
-        <div class="container text-center">
+        <div class="container text-center reveal">
             <p class="social-text">“Bygget i Norge – skannet i Halden – driftes av Aurora”</p>
             <div class="vision-box">
                 <p><strong>Visjon:</strong> “Vi skaper, AI drifter, og alt vokser i et miljøpositivt system.”</p>
@@ -165,5 +175,6 @@
         </div>
     </footer>
 
+    <script src="script.js"></script>
 </body>
 </html>

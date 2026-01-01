@@ -352,10 +352,36 @@ footer {
     font-size: 0.9rem;
 }
 
+/* Animation Classes */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.delay-100 { transition-delay: 0.1s; }
+.delay-200 { transition-delay: 0.2s; }
+.delay-300 { transition-delay: 0.3s; }
+
+/* Enhancements for Mobile */
 @media (max-width: 768px) {
     .logo { font-size: 3rem; }
     .story-timeline { flex-direction: column; }
-    .arrow { transform: rotate(90deg); }
+    .arrow { transform: rotate(90deg); margin: 1rem 0; }
     .footer-content { flex-direction: column; text-align: center; }
     .footer-info { text-align: center; }
+    
+    .acronym-card h2 { font-size: 3rem; }
+    .hero { padding: 0 1rem; }
+}
+
+/* Mouse Parallax Effect on Hero Background */
+.hero-bg {
+    transition: transform 0.1s ease-out;
+    will-change: transform;
 }

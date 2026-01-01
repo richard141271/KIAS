@@ -55,45 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
 function generatePDF() {
     const originalElement = document.getElementById('pdf-content');
     
-    // Create a wrapper to isolate the PDF content
-    const wrapper = document.createElement('div');
-    Object.assign(wrapper.style, {
-        position: 'fixed',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: 'auto',
-        minHeight: '100vh',
-        zIndex: '9999999',
-        backgroundColor: '#ffffff',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        padding: '20px'
-    });
-
-    // Create a clone
+    // Save current scroll position
+    const originalScrollY = window.scrollY;
+    
+    // 1. Clone the element
     const clone = originalElement.cloneNode(true);
     
-    // Add the print-specific class
-    clone.classList.add('pdf-export-style');
-    
-    // Force styles on clone to ensure it looks like a document
-    Object.assign(clone.style, {
-        position: 'relative',
-        width: '210mm',
-        minHeight: '297mm',
-        boxShadow: 'none',
-        margin: '0',
-        transform: 'none',
-        opacity: '1',
-        visibility: 'visible',
-        display: 'block',
-        backgroundColor: '#ffffff',
-        color: '#000000'
-    });
-
-    // Sync values from original to clone
+    // 2. Sync Input Values (Crucial for user data)
     const originalInputs = originalElement.querySelectorAll('input, textarea, select');
     const cloneInputs = clone.querySelectorAll('input, textarea, select');
     
@@ -120,10 +88,10 @@ function generatePDF() {
         }
     });
 
-    // Strip any animation classes from all children in the clone
+    // 3. Clean up the clone (Remove animations, force colors)
     const allElements = clone.querySelectorAll('*');
     allElements.forEach(el => {
-        el.classList.remove('reveal', 'aos-animate');
+        el.classList.remove('reveal', 'aos-animate', 'active');
         el.style.transition = 'none';
         el.style.animation = 'none';
         el.style.opacity = '1';
@@ -134,41 +102,64 @@ function generatePDF() {
         }
     });
     
-    // Add clone to wrapper, and wrapper to body
-    wrapper.appendChild(clone);
-    document.body.appendChild(wrapper);
+    // 4. "Exclusive Mode" Strategy
+    // Hide all existing body children
+    const bodyChildren = Array.from(document.body.children);
+    bodyChildren.forEach(child => child.style.display = 'none');
     
-    // Scroll to top to ensure clean capture
-    const originalScrollY = window.scrollY;
+    // Append clone directly to body
+    document.body.appendChild(clone);
+    
+    // Style the clone to look like a document on the screen
+    Object.assign(clone.style, {
+        display: 'block',
+        position: 'relative', // Normal flow
+        width: '100%',
+        maxWidth: '210mm',
+        margin: '0 auto',
+        backgroundColor: '#ffffff',
+        color: '#000000',
+        padding: '20px',
+        boxShadow: 'none',
+        zIndex: '9999',
+        visibility: 'visible'
+    });
+    
+    // Scroll to top to ensure html2canvas sees it from 0,0
     window.scrollTo(0, 0);
 
-    // Options for html2pdf
+    // 5. Generate PDF
     const opt = {
-        margin:       0,
+        margin:       10,
         filename:     'KIAS-Bestillingsskjema.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { 
             scale: 2, 
             logging: false, 
             useCORS: true, 
-            scrollY: 0,
-            windowWidth: 1200 // Force desktop width
+            windowWidth: 1200, // Force desktop width
+            scrollY: 0
         },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak:    { mode: 'avoid-all' }
     };
 
-    // Small delay to ensure rendering
+    // Small delay to allow DOM to settle
     setTimeout(() => {
         html2pdf().set(opt).from(clone).save().then(() => {
-            // Clean up
-            document.body.removeChild(wrapper);
+            // 6. Restore Original State
+            document.body.removeChild(clone);
+            bodyChildren.forEach(child => child.style.display = '');
             window.scrollTo(0, originalScrollY);
         }).catch(err => {
             console.error("PDF Generation Error:", err);
-            alert("Det oppstod en feil under generering av PDF. Prøv igjen.");
-            document.body.removeChild(wrapper);
+            alert("Det oppstod en feil. Prøv igjen.");
+            // Restore state on error too
+            if (document.body.contains(clone)) {
+                document.body.removeChild(clone);
+            }
+            bodyChildren.forEach(child => child.style.display = '');
             window.scrollTo(0, originalScrollY);
         });
-    }, 500);
+    }, 800); // Increased delay slightly to be safe
 }

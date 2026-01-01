@@ -15,12 +15,18 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-main);
     line-height: 1.6;
     overflow-x: hidden;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
 }
 
 a {
@@ -357,6 +363,8 @@ footer {
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s ease-out;
+    will-change: opacity, transform;
+    backface-visibility: hidden;
 }
 
 .reveal.active {

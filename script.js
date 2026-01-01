@@ -10,8 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-                observer.unobserve(entry.target); // Animate only once
+                // Use requestAnimationFrame for smoother class toggling
+                requestAnimationFrame(() => {
+                    entry.target.classList.add('active');
+                });
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -19,27 +22,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const revealElements = document.querySelectorAll('.reveal');
     revealElements.forEach(el => observer.observe(el));
 
-    // 2. Smooth Scrolling for Anchor Links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
+    // 2. Smooth Scrolling is now handled by CSS (html { scroll-behavior: smooth; })
+    // Removed JS implementation to prevent conflicts and improve performance.
 
-    // 3. Subtle Parallax / Mouse Move Effect on Hero
+    // 3. Optimized Parallax Effect on Hero
     const hero = document.querySelector('.hero');
     const heroBg = document.getElementById('hero-bg');
 
     if (hero && heroBg) {
+        let ticking = false;
+
         hero.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            
-            // Move background slightly opposite to mouse
-            heroBg.style.transform = `translate(-${x * 20}px, -${y * 20}px)`;
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const x = e.clientX / window.innerWidth;
+                    const y = e.clientY / window.innerHeight;
+                    
+                    // Move background slightly opposite to mouse
+                    // translate3d forces hardware acceleration
+                    heroBg.style.transform = `translate3d(-${x * 20}px, -${y * 20}px, 0)`;
+                    
+                    ticking = false;
+                });
+                
+                ticking = true;
+            }
         });
     }
 });

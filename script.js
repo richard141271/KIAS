@@ -57,11 +57,12 @@ function generatePDF() {
     
     // Options for html2pdf
     const opt = {
-        margin:       10,
+        margin:       [5, 5, 5, 5], // T, R, B, L
         filename:     'KIAS-Bestillingsskjema.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, logging: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas:  { scale: 2, logging: false, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: 'avoid-all' }
     };
 
     // Use html2pdf to generate the PDF
@@ -77,13 +78,43 @@ function generatePDF() {
             } else {
                 input.removeAttribute('checked');
             }
-        } else if (input.type === 'text' || input.type === 'email' || input.tagName === 'TEXTAREA') {
+        } else if (input.type === 'text' || input.type === 'email' || input.type === 'number') {
             input.setAttribute('value', input.value);
-            if (input.tagName === 'TEXTAREA') {
-                input.innerHTML = input.value;
-            }
+        } else if (input.tagName === 'TEXTAREA') {
+            input.innerHTML = input.value;
         }
     });
 
-    html2pdf().set(opt).from(element).save();
+    // Temporarily force text color to black and background to white for PDF generation
+    const originalColor = element.style.color;
+    const originalBg = element.style.background;
+    
+    element.style.color = '#000000';
+    element.style.background = '#ffffff';
+    
+    // Helper to force all children to have black text
+    const allChildren = element.querySelectorAll('*');
+    allChildren.forEach(child => {
+        child.dataset.originalColor = child.style.color || '';
+        child.style.color = '#000000';
+        
+        // Handle border colors too
+        child.dataset.originalBorderColor = child.style.borderColor || '';
+        if (getComputedStyle(child).borderColor !== 'rgba(0, 0, 0, 0)') {
+            child.style.borderColor = '#000000';
+        }
+    });
+    
+    html2pdf().set(opt).from(element).save().then(() => {
+        // Restore styles after save
+        element.style.color = originalColor;
+        element.style.background = originalBg;
+        
+        allChildren.forEach(child => {
+            child.style.color = child.dataset.originalColor;
+            if (child.dataset.originalBorderColor) {
+                child.style.borderColor = child.dataset.originalBorderColor;
+            }
+        });
+    });
 }

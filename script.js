@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Optimized Parallax Effect on Hero
     const hero = document.querySelector('.hero');
-    const heroBg = document.getElementById('hero-bg');
+    const heroBg = document.querySelector('.hero-bg');
 
     if (hero && heroBg) {
         let ticking = false;

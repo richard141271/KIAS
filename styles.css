@@ -569,14 +569,15 @@ footer {
     color: #000000 !important;
     width: 210mm !important;
     min-height: 297mm !important;
-    padding: 20mm !important;
+    padding: 10mm 15mm !important; /* Reduced padding */
     margin: 0 !important;
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    z-index: 99999 !important; /* Must be on top to be captured */
+    z-index: 99999 !important;
     display: block !important;
     visibility: visible !important;
+    font-size: 12px !important; /* Base font size reduction */
 }
 
 .pdf-export-style * {
@@ -587,19 +588,83 @@ footer {
     box-shadow: none !important;
 }
 
-.pdf-export-style .form-header,
-.pdf-export-style .services-table th,
-.pdf-export-style .services-table td,
-.pdf-export-style .contact-grid,
-.pdf-export-style .work-desc-section,
-.pdf-export-style .line-input,
-.pdf-export-style .qty-input {
-    border-color: #000000 !important;
+.pdf-export-style .form-header {
+    margin-bottom: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    border-bottom-width: 1px !important;
 }
 
-.pdf-export-style .services-table th {
-    background-color: #f0f0f0 !important;
+.pdf-export-style .form-header h2 {
+    font-size: 1.2rem !important; /* Smaller title */
+    margin-bottom: 0.2rem !important;
 }
+
+.pdf-export-style .warning-text {
+    font-size: 0.7rem !important;
+    margin: 0 !important;
+}
+
+.pdf-export-style .form-row {
+    margin-bottom: 0.5rem !important;
+    gap: 0.5rem !important;
+}
+
+.pdf-export-style .contact-grid {
+    margin-bottom: 0.5rem !important;
+    padding: 0.5rem !important;
+    gap: 0.5rem !important;
+}
+
+.pdf-export-style .input-group {
+    margin-bottom: 0 !important;
+}
+
+.pdf-export-style .input-group label {
+    font-size: 0.8rem !important;
+    min-width: 60px !important;
+}
+
+.pdf-export-style .work-desc-section {
+    padding: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.pdf-export-style .work-desc-section h3 {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.5rem !important;
+    padding-bottom: 0.2rem !important;
+}
+
+.pdf-export-style .work-area {
+    height: 80px !important; /* Reduced height */
+}
+
+.pdf-export-style .info-small {
+    font-size: 0.7rem !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.2 !important;
+}
+
+.pdf-export-style .services-table {
+    font-size: 0.8rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.pdf-export-style .services-table th,
+.pdf-export-style .services-table td {
+    padding: 0.2rem 0.3rem !important;
+}
+
+.pdf-export-style .form-footer {
+    margin-top: 1rem !important;
+    font-size: 0.7rem !important;
+}
+
+.pdf-export-style .line-input {
+    font-size: 0.9rem !important;
+    padding: 0 0.2rem !important;
+}
+
 
 .paper-form {
     background: #fff;

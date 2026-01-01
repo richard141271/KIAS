@@ -55,31 +55,55 @@ document.addEventListener('DOMContentLoaded', () => {
 function generatePDF() {
     const originalElement = document.getElementById('pdf-content');
     
-    // Create a clone to manipulate for PDF generation
+    // Create a wrapper to isolate the PDF content
+    const wrapper = document.createElement('div');
+    Object.assign(wrapper.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: 'auto',
+        minHeight: '100vh',
+        zIndex: '9999999',
+        backgroundColor: '#ffffff',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: '20px'
+    });
+
+    // Create a clone
     const clone = originalElement.cloneNode(true);
     
     // Add the print-specific class
     clone.classList.add('pdf-export-style');
     
-    // Explicitly set overlay styles to ensure visibility for html2canvas
+    // Force styles on clone to ensure it looks like a document
     Object.assign(clone.style, {
-        position: 'absolute',
-        top: '0',
-        left: '0',
+        position: 'relative',
         width: '210mm',
-        zIndex: '999999',
-        background: '#ffffff',
-        color: '#000000',
+        minHeight: '297mm',
+        boxShadow: 'none',
+        margin: '0',
+        transform: 'none',
+        opacity: '1',
+        visibility: 'visible',
         display: 'block',
-        visibility: 'visible'
+        backgroundColor: '#ffffff',
+        color: '#000000'
     });
 
-    // Sync values from original to clone (cloneNode doesn't copy current input values)
-    const originalInputs = originalElement.querySelectorAll('input, textarea');
-    const cloneInputs = clone.querySelectorAll('input, textarea');
+    // Sync values from original to clone
+    const originalInputs = originalElement.querySelectorAll('input, textarea, select');
+    const cloneInputs = clone.querySelectorAll('input, textarea, select');
     
     originalInputs.forEach((input, index) => {
         const cloneInput = cloneInputs[index];
+        
+        // Force styling on inputs for PDF
+        cloneInput.style.color = '#000000';
+        cloneInput.style.borderColor = '#000000';
+        cloneInput.style.background = 'transparent';
         
         if (input.type === 'checkbox' || input.type === 'radio') {
             cloneInput.checked = input.checked;
@@ -89,23 +113,38 @@ function generatePDF() {
         } else if (input.tagName === 'TEXTAREA') {
             cloneInput.innerHTML = input.value;
             cloneInput.value = input.value;
+            cloneInput.style.resize = 'none';
         } else {
             cloneInput.setAttribute('value', input.value);
             cloneInput.value = input.value;
         }
     });
+
+    // Strip any animation classes from all children in the clone
+    const allElements = clone.querySelectorAll('*');
+    allElements.forEach(el => {
+        el.classList.remove('reveal', 'aos-animate');
+        el.style.transition = 'none';
+        el.style.animation = 'none';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.color = '#000000'; // Force black text
+        if (el.style.borderColor) {
+             el.style.borderColor = '#000000';
+        }
+    });
     
-    // Append clone to body so html2pdf can render it
-    document.body.appendChild(clone);
+    // Add clone to wrapper, and wrapper to body
+    wrapper.appendChild(clone);
+    document.body.appendChild(wrapper);
     
-    // Save current scroll position and scroll to top
-    // html2canvas works best when scrolled to top
+    // Scroll to top to ensure clean capture
     const originalScrollY = window.scrollY;
     window.scrollTo(0, 0);
 
     // Options for html2pdf
     const opt = {
-        margin:       0, // Margins handled by CSS padding
+        margin:       0,
         filename:     'KIAS-Bestillingsskjema.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { 
@@ -113,16 +152,23 @@ function generatePDF() {
             logging: false, 
             useCORS: true, 
             scrollY: 0,
-            windowWidth: 1000 // Simulate desktop width to prevent mobile layout wrapping
+            windowWidth: 1200 // Force desktop width
         },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak:    { mode: 'avoid-all' }
     };
 
-    html2pdf().set(opt).from(clone).save().then(() => {
-        // Remove the clone after generation
-        document.body.removeChild(clone);
-        // Restore scroll position
-        window.scrollTo(0, originalScrollY);
-    });
+    // Small delay to ensure rendering
+    setTimeout(() => {
+        html2pdf().set(opt).from(clone).save().then(() => {
+            // Clean up
+            document.body.removeChild(wrapper);
+            window.scrollTo(0, originalScrollY);
+        }).catch(err => {
+            console.error("PDF Generation Error:", err);
+            alert("Det oppstod en feil under generering av PDF. Prøv igjen.");
+            document.body.removeChild(wrapper);
+            window.scrollTo(0, originalScrollY);
+        });
+    }, 500);
 }
